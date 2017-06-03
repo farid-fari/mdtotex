@@ -14,4 +14,4 @@ Requires **Python 3.6**.
 
 ### 0.1
 
-Initial beta.
+Initial beta, supports titles, italic and bold.
