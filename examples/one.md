@@ -26,9 +26,12 @@ I never remember it.
 
 Hello *world*, **here** I come...
 
+-Not a bullet
+*Not a bullet either
+* Bullet
  - Hello
  - World
 
 But also,
 
-    programming
+    programming('all')

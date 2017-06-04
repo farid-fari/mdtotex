@@ -49,7 +49,7 @@ for l in f.readlines():
         l = re.sub("#", r'\\#', l)
 
     # Bullet list detection
-    bullet = re.search(r'^ {0,3}[-*]', l)
+    bullet = re.search(r'^ {0,3}[-*] ', l)
     if bullet:
         if not itemize:
             n.write('\n' + r'\begin{itemize}' + '\n')
@@ -60,10 +60,15 @@ for l in f.readlines():
         n.write('\n' + r'\end{itemize}' + '\n')
         itemize = False
 
-    # Bold text detection
-    l = re.sub(r"\*\*(.*?)\*\*", r'\\textbf{\1}', l)
-    # Italic text detection
-    l = re.sub(r"\*(.*?)\*", r'\\textit{\1}', l)
+    # Code detection - cancels all future detections
+    code = re.search(r'^    ', l)
+    if code:
+        l = re.sub(r'^    ', '\n' + r'\\begin{verbatim}' + '\n', l)
+    else:
+        # Bold text detection
+        l = re.sub(r"\*\*(.*?)\*\*", r'\\textbf{\1}', l)
+        # Italic text detection
+        l = re.sub(r"\*(.*?)\*", r'\\textit{\1}', l)
 
     n.write(l.rstrip())
 
@@ -74,6 +79,8 @@ for l in f.readlines():
             # don't newline
             n.write(r'\mbox{}\newline')
         o[0] -= 1
+    if code:
+        n.write('\n' + r'\end{verbatim}' + '\n')
 
     n.write('\n')
 
