@@ -16,7 +16,7 @@ They're huge.
 
   ##### The relation between H and W
 
-I'm uninspired.
+I'm uninspired. *This is **a** trap.*
 
 ###### Unicode encoding of said letters
 
@@ -35,3 +35,13 @@ Hello *world*, **here** I come...
 But also,
 
     programming('all')
+
+# First part
+
+Once the hello has been given to the world, ...
+
+## Tables
+
+| Header one | Header two | Header three |
+| ----- | ----- | ------ |
+| first | second | third |

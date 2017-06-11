@@ -30,6 +30,9 @@ n.write(r'\begin{document}' + '\n\n')
 
 # Currently in itemized environment
 itemize = False
+# Currently in table environment
+# second value remembers headers
+table = [False, None]
 
 for l in f.readlines():
     # Amount of open brackets, parenthesis and square
@@ -69,6 +72,18 @@ for l in f.readlines():
         l = re.sub(r"\*\*(.*?)\*\*", r'\\textbf{\1}', l)
         # Italic text detection
         l = re.sub(r"\*(.*?)\*", r'\\textit{\1}', l)
+        # Table detection
+        tables = l.split('|')
+        if not table[0]:
+            # No table currently, looking
+            # for dashes
+            a = True
+            for k in tables:
+                if not re.search(r'-{3}', k):
+                    a = False
+            if a and table[1]:
+                # We got the dashes and header
+                table[0] = True
 
     n.write(l.rstrip())
 
