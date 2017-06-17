@@ -70,14 +70,17 @@ for l in f.readlines():
     else:
         # Bold text detection
         l = re.sub(r"\*\*(.*?)\*\*", r'\\textbf{\1}', l)
+
         # Italic text detection
         l = re.sub(r"\*(.*?)\*", r'\\textit{\1}', l)
+
         # Table detection
         tables = l.split('|')
         if tables[0] == '':
             del tables[0]
         if tables[-1] == '\n':
             del tables[-1]
+
         if not table[0] and len(tables) >= 2:
             # No table currently, looking
             # for dashes
@@ -105,6 +108,7 @@ for l in f.readlines():
                 # False alert on the headers
                 n.write(' | '.join(table[1]))
                 table[1] = []
+
         elif table[0]:
             if len(tables) == table[2]:
                 n.write(' & '.join(tables) + r'\\' + '\n')
@@ -136,6 +140,10 @@ if itemize:
     # End of itemized environment at end of doc
     n.write(r'\end{itemize}')
     itemize = False
+if table[0]:
+    # End of tabular environment at end of doc
+    n.write(r'\end{tabular}')
+    table = [False, [], 0]
 
 # End of the document
 n.write('\n' + r'\end{document}' + '\n')
