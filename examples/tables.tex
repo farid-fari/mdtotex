@@ -1,11 +1,13 @@
 \documentclass{article}
-\setlength{\parindent}{0pt}\begin{document}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\begin{document}
 
 \part*{Small tables}
 
 For the smaller
 
-\section*{First}
+\section*{Clean}
 
 
 \begin{tabular}{l | l | l}
@@ -18,6 +20,33 @@ first  &  second  &  third
 
 \end{tabular}
 
-\section*{Second}
+\section*{Outside borders}
 
 
+\begin{tabular}{ | l | l | l | }
+ Header one  &  Header two  &  Header three \\
+\hline
+
+ first  &  second  &  third \\
+
+\end{tabular}
+
+\part*{A real example}
+
+
+\begin{tabular}{ | l | l | l | }
+ Mot-clés        &  \textit{(anglais)}          &  Thèmes                              \\
+\hline
+
+ épidémies       &  epidemics            &  Modélisations stochastiques         \\
+
+ modèle SIR      &  SIR model            &  Mathématiques discrètes (\textit{graphes}) \\
+
+ infections      &  infections           &  Simulation informatique             \\
+
+ immunité        &  immunity             &                                      \\
+
+ trajectométrie  &  trajectory analysis  &                                      \\
+
+\end{tabular}
+\end{document}

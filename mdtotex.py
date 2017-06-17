@@ -11,7 +11,7 @@ import re
 filename = sys.argv[1]
 if not os.path.exists(filename):
     raise FileNotFoundError("Couldn't find target")
-f = open(filename, 'r')
+f = open(filename, 'r', encoding='utf-8')
 
 # Generates the new filename and opens it,
 # if it does not already exist
@@ -19,13 +19,15 @@ newfile = os.path.splitext(filename)
 newfile = newfile[0] + ".tex"
 if os.path.exists(newfile):
     raise FileExistsError("Target file exists")
-n = open(newfile, 'w')
+n = open(newfile, 'w', encoding='utf-8')
 print(f"Writing to {newfile}...")
 
 # Initial text
 n.write(r'\documentclass{article}' + '\n')
 ## Noone wants indented paragraphs in md
-n.write(r'\setlength{\parindent}{0pt}')
+n.write(r'\setlength{\parindent}{0pt}' + '\n')
+# To save accents and the such
+n.write(r'\usepackage[utf8]{inputenc}' + '\n')
 n.write(r'\begin{document}' + '\n\n')
 
 # Currently in itemized environment
