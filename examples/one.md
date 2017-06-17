@@ -42,6 +42,14 @@ Once the hello has been given to the world, ...
 
 ## Tables
 
+### First
+
+Header one | Header two | Header three
+----- | ----- | ------
+first | second | third
+
+### Second
+
 | Header one | Header two | Header three |
 | ----- | ----- | ------ |
 | first | second | third |

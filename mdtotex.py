@@ -32,7 +32,7 @@ n.write(r'\begin{document}' + '\n\n')
 itemize = False
 # Currently in table environment
 # second value remembers headers
-table = [False, None]
+table = [False, [], 0]
 
 for l in f.readlines():
     # Amount of open brackets, parenthesis and square
@@ -74,16 +74,46 @@ for l in f.readlines():
         l = re.sub(r"\*(.*?)\*", r'\\textit{\1}', l)
         # Table detection
         tables = l.split('|')
-        if not table[0]:
+        if tables[0] == '':
+            del tables[0]
+        if tables[-1] == '\n':
+            del tables[-1]
+        if not table[0] and len(tables) >= 2:
             # No table currently, looking
             # for dashes
             a = True
-            for k in tables:
-                if not re.search(r'-{3}', k):
+            for k in tables[1:-1]:
+                if not re.search(r'^ *-{3} *', k):
                     a = False
             if a and table[1]:
                 # We got the dashes and header
                 table[0] = True
+                table[2] = len(tables)
+                spec = ['l' for e in table[1]]
+                spec = ' | '.join(spec)
+                n.write(r'\begin{tabular}{' + spec + '}' + '\n')
+                n.write(' & '.join(table[1]) + r'\\' + '\n')
+                n.write(r'\hline' + '\n')
+                table[1] = []
+                # We're not writing the dashes ever
+                l = ""
+            elif not table[1]:
+                table[1] = tables
+                # We're keeping the headers in case
+                l = ""
+            else:
+                # False alert on the headers
+                n.write(' | '.join(table[1]))
+                table[1] = []
+        elif table[0]:
+            if len(tables) == table[2]:
+                n.write(' & '.join(tables) + r'\\' + '\n')
+                # Don't write raw MD
+                l = ""
+            else:
+                # End of the table
+                table = [False, [], 0]
+                n.write(r'\end{tabular}' + '\n')
 
     n.write(l.rstrip())
 
