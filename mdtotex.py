@@ -32,7 +32,9 @@ n.write(r'\begin{document}' + '\n\n')
 itemize = False
 # Currently in table environment
 # second value remembers headers
-table = [False, [], 0]
+# third the number of columns
+# fourth the left and right borders
+table = [False, [], 0, False]
 
 for l in f.readlines():
     # Amount of open brackets, parenthesis and square
@@ -76,10 +78,16 @@ for l in f.readlines():
 
         # Table detection
         tables = l.split('|')
-        if tables[0] == '':
+        borders = [False, False]
+        if tables and re.search(r'^\s*$', tables[0]):
             del tables[0]
-        if tables[-1] == '\n':
+            borders[0] = True
+        if tables and re.search(r'^\s*$', tables[-1]):
             del tables[-1]
+            borders[1] = True
+        # Pretty sure there's a clever way
+        # of doing this with nots and Nones
+        borders = borders[0] and borders[1]
 
         if not table[0] and len(tables) >= 2:
             # No table currently, looking
@@ -94,7 +102,10 @@ for l in f.readlines():
                 table[2] = len(tables)
                 spec = ['l' for e in table[1]]
                 spec = ' | '.join(spec)
-                n.write(r'\begin{tabular}{' + spec + '}' + '\n')
+                if table[3]:
+                    n.write(r'\begin{tabular}{ | ' + spec + ' | }' + '\n')
+                else:
+                    n.write(r'\begin{tabular}{' + spec + '}' + '\n')
                 n.write(' & '.join(table[1]) + r'\\' + '\n')
                 n.write(r'\hline' + '\n')
                 table[1] = []
@@ -102,6 +113,7 @@ for l in f.readlines():
                 l = ""
             elif not table[1]:
                 table[1] = tables
+                table[3] = borders
                 # We're keeping the headers in case
                 l = ""
             else:
@@ -116,7 +128,7 @@ for l in f.readlines():
                 l = ""
             else:
                 # End of the table
-                table = [False, [], 0]
+                table = [False, [], 0, False]
                 n.write(r'\end{tabular}' + '\n')
 
     n.write(l.rstrip())
@@ -143,7 +155,7 @@ if itemize:
 if table[0]:
     # End of tabular environment at end of doc
     n.write(r'\end{tabular}')
-    table = [False, [], 0]
+    table = [False, [], 0, False]
 
 # End of the document
 n.write('\n' + r'\end{document}' + '\n')
