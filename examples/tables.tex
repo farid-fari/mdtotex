@@ -5,12 +5,12 @@
 
 \part*{Small tables}
 
-For the smaller
+For the smaller ones among us.
 
 \section*{Clean}
 
 
-\begin{tabular}{l | l | l}
+\begin{tabular}{ l | l | l }
 Header one  &  Header two  &  Header three
 \\
 \hline
@@ -23,7 +23,7 @@ first  &  second  &  third
 \section*{Outside borders}
 
 
-\begin{tabular}{ | l | l | l | }
+\begin{tabular}{ |l | l | l| }
  Header one  &  Header two  &  Header three \\
 \hline
 
@@ -31,10 +31,23 @@ first  &  second  &  third
 
 \end{tabular}
 
+\section*{One border}
+
+
+\begin{tabular}{ |l | l | l }
+ Header one  &  Header two  &  Header three
+\\
+\hline
+
+ first  &  second  &  third
+\\
+
+\end{tabular}
+
 \part*{A real example}
 
 
-\begin{tabular}{ | l | l | l | }
+\begin{tabular}{ |l | l | l| }
  Mot-clés        &  \textit{(anglais)}          &  Thèmes                              \\
 \hline
 
@@ -49,4 +62,24 @@ first  &  second  &  third
  trajectométrie  &  trajectory analysis  &                                      \\
 
 \end{tabular}
+
+\part*{Unvalid tables}
+
+This shouldn't be tables, just a bunch of \textbf{garbage}.
+
+
+| Header one | Header two | Header three |
+| first | second | third |
+
+
+| Header one | Header two | Header three |
+| ----- | ----- |
+
+
+| first | second | third |
+| Header one | Header two | Header three |
+
+| ----- | ----- | - |
+| first | second | third |
+
 \end{document}

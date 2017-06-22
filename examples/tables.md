@@ -1,6 +1,6 @@
 # Small tables
 
-For the smaller
+For the smaller ones among us.
 
 ## Clean
 
@@ -14,6 +14,12 @@ first | second | third
 | ----- | ----- | ------ |
 | first | second | third |
 
+## One border
+
+| Header one | Header two | Header three
+| ----- | ----- | ------
+| first | second | third
+
 # A real example
 
 | Mot-clés       | *(anglais)*         | Thèmes                              |
@@ -23,3 +29,18 @@ first | second | third
 | infections     | infections          | Simulation informatique             |
 | immunité       | immunity            |                                     |
 | trajectométrie | trajectory analysis |                                     |
+
+# Unvalid tables
+
+This shouldn't be tables, just a bunch of **garbage**.
+
+| Header one | Header two | Header three |
+| first | second | third |
+
+| Header one | Header two | Header three |
+| ----- | ----- |
+| first | second | third |
+
+| Header one | Header two | Header three |
+| ----- | ----- | - |
+| first | second | third |
