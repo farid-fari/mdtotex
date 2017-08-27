@@ -1,7 +1,7 @@
 """Converts markdown files to LaTeX files with
 basic formatting only.
 
-Suitable only for python 3.6+."""
+Suitable only for python 3.6 and higher."""
 
 import sys
 import os
@@ -37,8 +37,7 @@ itemize = False
 # Currently in table environment
 # second value remembers headers
 # third the number of columns
-# fourth the left and right borders
-table = [False, [], 0, False]
+table = [False, "", 0]
 
 for l in f.readlines():
     # Amount of open brackets, parenthesis and square
@@ -82,48 +81,50 @@ for l in f.readlines():
 
         # Table detection
         tables = l.split('|')
-        borders = [False, False]
         if tables and re.search(r'^\s*$', tables[0]):
             del tables[0]
-            borders[0] = True
         if tables and re.search(r'^\s*$', tables[-1]):
             del tables[-1]
-            borders[1] = True
-        # Pretty sure there's a clever way
-        # of doing this with nots and Nones
-        borders = borders[0] and borders[1]
+        cols = len(tables)
 
-        if not table[0] and len(tables) >= 2:
+        if not table[0] and cols >= 2:
             # No table currently, looking
             # for dashes
             a = True
             for k in tables[1:-1]:
                 if not re.search(r'^ *-{3} *', k):
                     a = False
-            if a and table[1]:
-                # We got the dashes and header
+            if a and table[1] and cols == table[2]:
+                # We got the dashes and header and
+                # the right amount of columns
                 table[0] = True
-                table[2] = len(tables)
-                spec = ['l' for e in table[1]]
+                head = table[1].split('|')
+                borders = ['', '']
+                if head and re.search(r'^\s*$', head[0]):
+                    del head[0]
+                    borders[0] = '|'
+                if head and re.search(r'^\s*$', head[-1]):
+                    del head[-1]
+                    borders[1] = '|'
+
+                spec = ['l' for e in head]
                 spec = ' | '.join(spec)
-                if table[3]:
-                    n.write(r'\begin{tabular}{ | ' + spec + ' | }' + '\n')
-                else:
-                    n.write(r'\begin{tabular}{' + spec + '}' + '\n')
-                n.write(' & '.join(table[1]) + r'\\' + '\n')
+                n.write(r'\begin{tabular}{ ' + borders[0] + spec + borders[1] + ' }' + '\n')
+                n.write(' & '.join(head) + r'\\' + '\n')
                 n.write(r'\hline' + '\n')
-                table[1] = []
+                table[1] = ""
                 # We're not writing the dashes ever
                 l = ""
             elif not table[1]:
-                table[1] = tables
-                table[3] = borders
-                # We're keeping the headers in case
+                table[1] = l
+                table[2] = len(tables)
+                # We're keeping the headers for later
                 l = ""
             else:
-                # False alert on the headers
-                n.write(' | '.join(table[1]))
-                table[1] = []
+                # False alert on the headers: either
+                # wrong cols or not enough dashes
+                n.write(table[1])
+                table[1] = ""
 
         elif table[0]:
             if len(tables) == table[2]:
@@ -132,7 +133,7 @@ for l in f.readlines():
                 l = ""
             else:
                 # End of the table
-                table = [False, [], 0, False]
+                table = [False, "", 0]
                 n.write(r'\end{tabular}' + '\n')
 
     n.write(l.rstrip())
@@ -159,7 +160,7 @@ if itemize:
 if table[0]:
     # End of tabular environment at end of doc
     n.write(r'\end{tabular}')
-    table = [False, [], 0, False]
+    table = [False, "", 0]
 
 # End of the document
 n.write('\n' + r'\end{document}' + '\n')
