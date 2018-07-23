@@ -5,6 +5,8 @@
 *.aux
 *.log
 *.synctex.gz
+*.fls
+*.fdb_latexmk
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
